@@ -1,6 +1,6 @@
 $(function() {
-    $("#output").html("");
     $(".file_button").click(function() {
+        $("#output").html("");
         $("#url-img").attr("src", $("#img_url_input").val());
         $.ajax({
             url: 'https://faceplusplus-faceplusplus.p.mashape.com/detection/detect?attribute=glass%2Cpose%2Cgender%2Cage%2Crace%2Csmiling', // The URL to the API. You can get this by clicking on "Show CURL example" from an API profile
@@ -8,8 +8,19 @@ $(function() {
             data: { url: $("#img_url_input").val() }, // Additional parameters here
             datatype: 'json',
             success: function(data) {
-                $("#output").html(JSON.stringify(data.face[0], null, 4));
-                //console.log(data.face[0]);
+                for (var i = 0; i < data.face.length; i++) {
+                    $("#output").append("<h5> Person :" + (i + 1) + "</h5>");
+                    $("#output").append("<ul>");
+                    $("#output").append("<li>Age: " + data.face[i].attribute["age"]["value"] + "</li>");
+                    $("#output").append("<li>Gender: " + data.face[i].attribute["gender"]["value"] + "</li>");
+                    $("#output").append("<li>Glass: " + data.face[i].attribute["glass"]["value"] + "</li>");
+                    $("#output").append("<li>Race: " + data.face[i].attribute["race"]["value"] + "</li>");
+                    $("#output").append("<li>Smiling: " + data.face[i].attribute["smiling"]["value"] + "</li>");
+                    $("#output").append("</ul>");
+                    $("#output").append("<h6>More details: </h6>");
+                    $("#output").append(JSON.stringify(data.face[i].attribute, null, 4));
+                    $("#output").append("<br>");
+                }
             },
             error: function(err) {
                 alert(err);
