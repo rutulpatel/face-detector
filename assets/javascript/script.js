@@ -1,6 +1,11 @@
 $(function() {
+
+
     $(".file_button").click(function() {
-        $("#output").html("");
+        $("#output").html('<div class="progress progress-striped active" style="height: auto;">' +
+            '<div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:100%; height: auto;>' +
+            'Loading...' +
+            '</div></div>');
         $("#url-img").attr("src", $("#img_url_input").val());
         $.ajax({
             url: 'https://faceplusplus-faceplusplus.p.mashape.com/detection/detect?attribute=glass%2Cpose%2Cgender%2Cage%2Crace%2Csmiling', // The URL to the API. You can get this by clicking on "Show CURL example" from an API profile
@@ -8,6 +13,7 @@ $(function() {
             data: { url: $("#img_url_input").val() }, // Additional parameters here
             datatype: 'json',
             success: function(data) {
+                $("#output").html("");
                 for (var i = 0; i < data.face.length; i++) {
                     $("#output").append("<h5> Person :" + (i + 1) + "</h5>");
                     $("#output").append("<ul>");
@@ -23,7 +29,7 @@ $(function() {
                 }
             },
             error: function(err) {
-                alert(err);
+                alert("Something is not right..., i am getting this error:" + err + ". Please try again.");
             },
             beforeSend: function(xhr) {
                 xhr.setRequestHeader("X-Mashape-Authorization", "ZaO4Yp4FrrmshCA8KyHlK28yurSmp1hLlR2jsnXKFQr14Lpscv"); // Enter here your Mashape key
